@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.validators import RegexValidator
 
+
 class UniversityImage(models.Model):
     image = models.ImageField(upload_to="universities/")
 
@@ -42,15 +43,45 @@ class Our_advantages(models.Model):
     
     def __str__(self):
         return f'{self.title}'
+     
+
+
+
+class Gallery(models.Model):
+    images = models.ImageField(upload_to='gallery/')
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    def __str__(self):
+        return self.title
     
+
+class our_results(models.Model):
+    title = models.CharField(max_length=100)
+    count = models.IntegerField()
+
+    def __str__(self):
+        return str(self.count)
+    
+
 
 class Form(models.Model):
-    full_name = models.CharField(max_length=100, verbose_name='toliq ism')
-    phone_number = models.CharField(max_length=20,
-                                     verbose_name='Telefon raqami')
-    message = models.TextField(verbose_name='Xabar')
 
+    OQUV_DARAJALARI = (
+        ('1', 'Bakalavr'),
+        ('2', 'Magistr'),
+        ('3', 'Doktorantura'),
+    )
+
+    oquv_darajasi = models.CharField(max_length=1, choices=OQUV_DARAJALARI)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=50)
+    phone_number = models.CharField(max_length=50,
+                                     validators=[RegexValidator(r'^\+998\d{9}$')])
+    message = models.CharField(max_length=255, null=True)
     
+
+
+    def __str__(self) -> str:
+        return self.first_name
     
-    def __str__(self):
-        return f'{self.full_name}'
+
